@@ -62,6 +62,34 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /v1/products/{id}:
+    get:
+      operationId: findProduct
+      summary: Find product
+      description: Find product
+      tags:
+        - Products
+      parameters:
+        - name: id
+          in: path
+          description: Product id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Found product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   securitySchemes:
     bearerAuth:
@@ -78,21 +106,26 @@ components:
         - message
       properties:
         code:
+          readOnly: true
           type: integer
           format: int32
         message:
+          readOnly: true
           type: string
 
     Product:
       type: object
       description: Single product from source system
       required:
-        - originId
+        - id
         - productCode
         - name
+        - childProductIds
+        - childProductCodes
       properties:
-        originId:
-          type: string
+        id:
+          type: integer
+          format: int64
           readOnly: true
           description: Product id from source system
         productCode:
@@ -102,3 +135,16 @@ components:
         name:
           type: string
           description: Name of the product
+        childProductIds:
+          type: array
+          description: List of child product ids
+          readOnly: true
+          items:
+            type: integer
+            format: int64
+        childProductCodes:
+          type: array
+          description: List of child product codes
+          readOnly: true
+          items:
+            type: string
