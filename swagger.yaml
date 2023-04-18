@@ -153,13 +153,11 @@ paths:
           required: true
           schema:
             type: string
-            format: date-time
         - name: updatedBefore
           in: query
           required: true
           schema:
             type: string
-            format: date-time
         - name: state
           in: query
           schema:
