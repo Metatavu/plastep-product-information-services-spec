@@ -348,6 +348,9 @@ components:
           description: "Sub work stage id"
         state:
           $ref: "#/components/schemas/WorkStageState"
+        workPhaseId:
+          type: integer
+          format: int32
         machineId:
           type: integer
           format: int64
