@@ -32,7 +32,7 @@ paths:
       parameters:
         - name: page
           in: query
-          description: Page number. Defaults to 0
+          description: Page number. Defaults to 1
           schema:
             type: integer
         - name: pageSize
@@ -100,7 +100,7 @@ paths:
       parameters:
         - name: page
           in: query
-          description: Page number. Defaults to 0
+          description: Page number. Defaults to 1
           schema:
             type: integer
         - name: pageSize
@@ -140,7 +140,7 @@ paths:
       parameters:
         - name: page
           in: query
-          description: Page number. Defaults to 0
+          description: Page number. Defaults to 1
           schema:
             type: integer
         - name: pageSize
