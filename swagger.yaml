@@ -46,9 +46,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Product"
+                $ref: "#/components/schemas/ProductsListResponse"
           headers:
             Total-Count:
               schema:
@@ -82,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Product"
+                $ref: "#/components/schemas/ProductFindResponse"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -114,9 +112,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Machine"
+                $ref: "#/components/schemas/MachinesListResponse"
           headers:
             Total-Count:
               schema:
@@ -168,9 +164,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MainWorkStage"
+                $ref: "#/components/schemas/WorkStagesListResponse"
           headers:
             Total-Count:
               schema:
@@ -205,9 +199,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/MainWorkStage"
+                $ref: "#/components/schemas/WorkStageFindResponse"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -273,6 +265,77 @@ components:
           readOnly: true
           items:
             type: string
+
+    ProductFindResponse:
+      type: object
+      description: Single product from source system
+      properties:
+        product:
+          $ref: "#/components/schemas/Product"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        ok:
+          type: boolean
+          description: Indicates if product was found
+
+    WorkStageFindResponse:
+      type: object
+      description: Single work stage from source system
+      properties:
+        workStage:
+          $ref: "#/components/schemas/MainWorkStage"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        ok:
+          type: boolean
+          description: Indicates if work stage was found
+
+    ProductsListResponse:
+      type: object
+      description: List of products
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is next page
+
+    WorkStagesListResponse:
+      type: object
+      description: List of work stages
+      properties:
+        workStages:
+          type: array
+          items:
+            $ref: "#/components/schemas/MainWorkStage"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is next page
+
+    MachinesListResponse:
+      type: object
+      description: List of machines
+      properties:
+        machines:
+          type: array
+          items:
+            $ref: "#/components/schemas/Machine"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is next page
 
     Machine:
       type: object
