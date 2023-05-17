@@ -32,7 +32,7 @@ paths:
       parameters:
         - name: page
           in: query
-          description: Page number. Defaults to 0
+          description: Page number. Defaults to 1
           schema:
             type: integer
         - name: pageSize
@@ -46,9 +46,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Product"
+                $ref: "#/components/schemas/ProductsListResponse"
           headers:
             Total-Count:
               schema:
@@ -82,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Product"
+                $ref: "#/components/schemas/ProductFindResponse"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -100,7 +98,7 @@ paths:
       parameters:
         - name: page
           in: query
-          description: Page number. Defaults to 0
+          description: Page number. Defaults to 1
           schema:
             type: integer
         - name: pageSize
@@ -114,15 +112,94 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Machine"
+                $ref: "#/components/schemas/MachinesListResponse"
           headers:
             Total-Count:
               schema:
                 type: integer
                 format: int64
               description: Total count of products with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/workStages:
+    get:
+      operationId: listWorkStages
+      summary: Lists work stages.
+      description: Lists work stages.
+      tags:
+        - WorkStages
+      parameters:
+        - name: page
+          in: query
+          description: Page number. Defaults to 1
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: Page size. Defaults to 100
+          schema:
+            type: integer
+        - name: updatedAfter
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: updatedBefore
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: state
+          in: query
+          schema:
+            $ref: "#/components/schemas/WorkStageState"
+      responses:
+        "200":
+          description: List of work stages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkStagesListResponse"
+          headers:
+            Total-Count:
+              schema:
+                type: integer
+                format: int64
+              description: Total count of products with given filters.
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/workStages/{workStageId}:
+    get:
+      operationId: findWorkStage
+      summary: Finds main work stage with given ID.
+      description: Finds main work stage with given ID.
+      tags:
+        - WorkStages
+      parameters:
+        - name: workStageId
+          in: path
+          description: Work stage id
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Found work stage
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkStageFindResponse"
         "default":
           description: Invalid request was sent to the server
           content:
@@ -189,6 +266,77 @@ components:
           items:
             type: string
 
+    ProductFindResponse:
+      type: object
+      description: Single product from source system
+      properties:
+        product:
+          $ref: "#/components/schemas/Product"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        ok:
+          type: boolean
+          description: Indicates if product was found
+
+    WorkStageFindResponse:
+      type: object
+      description: Single work stage from source system
+      properties:
+        workStage:
+          $ref: "#/components/schemas/MainWorkStage"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        ok:
+          type: boolean
+          description: Indicates if work stage was found
+
+    ProductsListResponse:
+      type: object
+      description: List of products
+      properties:
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is next page
+
+    WorkStagesListResponse:
+      type: object
+      description: List of work stages
+      properties:
+        workStages:
+          type: array
+          items:
+            $ref: "#/components/schemas/MainWorkStage"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is next page
+
+    MachinesListResponse:
+      type: object
+      description: List of machines
+      properties:
+        machines:
+          type: array
+          items:
+            $ref: "#/components/schemas/Machine"
+        hasErrors:
+          type: boolean
+          description: Indicates if there were errors during processing request
+        hasNextPage:
+          type: boolean
+          description: Indicates if there is next page
+
     Machine:
       type: object
       description: Single machine from source system
@@ -205,3 +353,80 @@ components:
         description:
           type: string
           description: Description of the machine
+
+    WorkStageState:
+      type: string
+      enum:
+        - ACCEPTED
+        - IN_PROGRESS
+        - WAITING
+        - COMPLETED
+
+    MainWorkStage:
+      type: object
+      description: Single main work stage from source system
+      required:
+        - id
+        - state
+        - productCode
+        - workNumber
+        - subWorkStages
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: Main work stage id from source system
+        state:
+          $ref: "#/components/schemas/WorkStageState"
+        productCode:
+          type: string
+          readOnly: true
+          description: Product code
+        comment:
+          type: string
+          description: Comment
+        workNumber:
+          type: integer
+          format: int64
+        subWorkStages:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubWorkStage"
+
+    SubWorkStage:
+      type: object
+      description: "Sub work stage object"
+      required:
+        - id
+        - state
+        - machineId
+        - machineCode
+        - description
+        - productCode
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: "Sub work stage id"
+        state:
+          $ref: "#/components/schemas/WorkStageState"
+        workPhaseId:
+          type: integer
+          format: int32
+        machineId:
+          type: integer
+          format: int64
+          description: "Machine id"
+        machineCode:
+          type: string
+          description: "Machine code"
+        description:
+          type: string
+          description: "Description of sub work stage"
+        description2:
+          type: string
+          description: "Description2 of sub work stage"
+        productCode:
+          type: string
+          description: "Product code"
