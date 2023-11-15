@@ -142,6 +142,7 @@ paths:
             type: string
         - name: state
           in: query
+          required: false
           schema:
             $ref: "#/components/schemas/WorkStageState"
       responses:
@@ -476,13 +477,9 @@ components:
         description: Information of product's sub workstage on a machine
         required:
           - id
-          - state
           - machineId
           - machineCode
           - productCode
-          - productName
-          - startTime
-          - endTime
         properties:
           id:
             type: integer
