@@ -481,6 +481,8 @@ components:
           - machineCode
           - productCode
           - productName
+          - startTime
+          - endTime
         properties:
           id:
             type: integer
@@ -488,9 +490,14 @@ components:
             description: "Sub work stage id"
           state:
             $ref: "#/components/schemas/WorkStageState"
-          workPhaseId:
-            type: integer
-            format: int32
+          startTime:
+            type: string
+            format: date-time
+            description: "Start time of the production process"
+          endTime:
+            type: string
+            format: date-time
+            description: "End time of the production process"
           machineId:
             type: integer
             format: int64
