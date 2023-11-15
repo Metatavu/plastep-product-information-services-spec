@@ -472,47 +472,47 @@ components:
           type: string
           description: "Product code"
 
-      ProductSubWorkStage:
-        type: object
-        description: Information of product's sub workstage on a machine
-        required:
-          - id
-          - machineId
-          - machineCode
-          - productCode
-        properties:
-          id:
-            type: integer
-            format: int64
-            description: "Sub work stage id"
-          state:
-            $ref: "#/components/schemas/WorkStageState"
-          startTime:
-            type: string
-            format: date-time
-            description: "Start time of the production process"
-          endTime:
-            type: string
-            format: date-time
-            description: "End time of the production process"
-          machineId:
-            type: integer
-            format: int64
-            description: "Machine id"
-          machineCode:
-            type: string
-            description: "Machine code"
-          productCode:
-            type: string
-            description: "Product code"
-          productName:
-            type: string
-            description: "Product name"
-          workAmount:
-            type: integer
-            format: int32
-            description: "Work amount"
-          workAmountDone:
-            type: integer
-            format: int32
-            description: "Work amount done"
+    ProductSubWorkStage:
+      type: object
+      description: Information of product's sub workstage on a machine
+      required:
+        - id
+        - machineId
+        - machineCode
+        - productCode
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: "Sub work stage id"
+        state:
+          $ref: "#/components/schemas/WorkStageState"
+        startTime:
+          type: string
+          format: date-time
+          description: "Start time of the production process"
+        endTime:
+          type: string
+          format: date-time
+          description: "End time of the production process"
+        machineId:
+          type: integer
+          format: int64
+          description: "Machine id"
+        machineCode:
+          type: string
+          description: "Machine code"
+        productCode:
+          type: string
+          description: "Product code"
+        productName:
+          type: string
+          description: "Product name"
+        workAmount:
+          type: integer
+          format: int32
+          description: "Work amount"
+        workAmountDone:
+          type: integer
+          format: int32
+          description: "Work amount done"
